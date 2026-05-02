@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marketing Strategy Generator</title>
+  <style>
+    :root {
+      --paper: #fbfaf7;
+      --surface: #ffffff;
+      --surface-strong: #f4efe7;
+      --ink: #23201d;
+      --muted: #6e675f;
+      --line: #ded6ca;
+      --teal: #087d74;
+      --teal-dark: #066059;
+      --coral: #e35d3e;
+      --coral-dark: #bb4329;
+      --gold: #d49a20;
+      --green-soft: #d9ebe6;
+      --coral-soft: #f8dfd7;
+      --shadow: 0 18px 60px rgba(50, 38, 28, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(8, 125, 116, 0.10), rgba(251, 250, 247, 0) 360px),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    a {
+      color: var(--teal-dark);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 850;
+    }
+
+    .brand-subtitle {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 220px;
+      padding: 26px 0;
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.15rem, 4vw, 4.65rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 670px;
+      margin: 18px 0 0;
+      color: #514b45;
+      font-size: 1.05rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 24px;
+      max-width: 660px;
+    }
+
+    .metric {
+      min-height: 86px;
+      padding: 14px;
+      border: 1px solid rgba(222, 214, 202, 0.88);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.70);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .hero-panel {
+      display: grid;
+      align-content: end;
+      min-height: 300px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(227, 93, 62, 0.94), rgba(8, 125, 116, 0.94)),
+        radial-gradient(circle at 78% 16%, rgba(255, 255, 255, 0.42), transparent 28%);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel h2 {
+      max-width: 430px;
+      margin: 0;
+      font-size: clamp(1.45rem, 2.5vw, 2.25rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero-panel p {
+      max-width: 420px;
+      margin: 14px 0 0;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(330px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 10px 32px rgba(50, 38, 28, 0.07);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px 0;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 850;
+    }
+
+    .panel-note {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .panel-body { padding: 18px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field { min-width: 0; }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label,
+    .label {
+      display: block;
+      margin: 0 0 7px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #443d37;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid #cfc5b8;
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    select { cursor: pointer; }
+
+    input:focus,
+    select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 4px rgba(8, 125, 116, 0.14);
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      line-height: 1.25;
+    }
+
+    .segmented,
+    .profile-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .segmented { grid-template-columns: repeat(2, 1fr); }
+
+    .radio-tile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      margin: 0;
+      padding: 9px 10px;
+      border: 1px solid #cfc5b8;
+      border-radius: var(--radius);
+      background: #fff;
+      color: #443d37;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .radio-tile input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-tile:has(input:checked) {
+      border-color: var(--teal);
+      background: var(--green-soft);
+      color: var(--teal-dark);
+    }
+
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: var(--radius);
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    button:active { transform: translateY(0); }
+
+    .profile-btn {
+      padding: 9px 10px;
+      border: 1px solid #cfc5b8;
+      background: #fff;
+      color: #443d37;
+    }
+
+    .profile-btn.active {
+      border-color: var(--coral);
+      background: var(--coral);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(227, 93, 62, 0.20);
+    }
+
+    .primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      margin-top: 18px;
+      padding: 12px 16px;
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 14px 26px rgba(8, 125, 116, 0.22);
+    }
+
+    .primary-action:hover {
+      background: var(--teal-dark);
+      text-decoration: none;
+    }
+
+    .btn-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.20);
+      font-size: 0.86rem;
+    }
+
+    .muted,
+    .help-text {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .help-text { margin-top: 7px; }
+
+    .output-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .result-box {
+      min-height: 196px;
+      padding: 16px;
+      border: 1px dashed #cfc5b8;
+      border-radius: var(--radius);
+      background: #fffdfa;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 162px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee6dc;
+    }
+
+    .result-item:last-child { border-bottom: 0; }
+
+    .result-label {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .result-value {
+      min-width: 0;
+      font-weight: 800;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .link-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .file-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 10px;
+      border-radius: var(--radius);
+      background: var(--surface-strong);
+      color: #3f342a;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .file-link:hover {
+      background: var(--green-soft);
+      text-decoration: none;
+    }
+
+    pre {
+      min-height: 172px;
+      max-height: 360px;
+      margin: 0;
+      padding: 14px;
+      overflow: auto;
+      border: 1px solid #2d2925;
+      border-radius: var(--radius);
+      background: #1f1b18;
+      color: #f7efe4;
+      font: 0.86rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .is-running {
+      border-style: solid;
+      border-color: rgba(8, 125, 116, 0.35);
+      background: linear-gradient(90deg, rgba(217, 235, 230, 0.85), #fffdfa);
+    }
+
+    .error-box {
+      padding: 14px;
+      border: 1px solid rgba(227, 93, 62, 0.45);
+      border-radius: var(--radius);
+      background: var(--coral-soft);
+      color: #6c2819;
+      font-weight: 750;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        min-height: auto;
+        padding-bottom: 4px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell {
+        width: min(100% - 22px, 1180px);
+        padding-top: 14px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .status-pill { white-space: normal; }
+
+      .metrics,
+      .form-grid,
+      .segmented,
+      .profile-buttons,
+      .link-list {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        min-height: 230px;
+        padding: 18px;
+      }
+
+      .panel-header,
+      .panel-body {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .result-item {
+        display: grid;
+        gap: 4px;
+      }
+
+      .result-value { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">MS</div>
+        <div>
+          <p class="brand-title">Marketing Strategy Generator</p>
+          <p class="brand-subtitle">Diploma web interface for review-based strategy generation</p>
+        </div>
+      </div>
+      <div class="status-pill" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="appStatus">Ready to run</span>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="pageTitle">
+      <div class="hero-copy">
+        <h1 id="pageTitle">Customer Review Marketing Strategy</h1>
+        <p class="lead">Select a product, choose the generation profile, and turn recent customer reviews into a structured marketing strategy with PDF and JSON outputs.</p>
+        <div class="metrics" aria-label="Key parameters">
+          <div class="metric">
+            <b>2</b>
+            <span>datasets</span>
+          </div>
+          <div class="metric">
+            <b>10</b>
+            <span>reviews maximum</span>
+          </div>
+          <div class="metric">
+            <b>PDF</b>
+            <span>export-ready output</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div>
+          <h2>From raw reviews to actionable product positioning.</h2>
+          <p>The system extracts customer pain points, purchase drivers, and category signals, then formats them into a strategy that is ready for evaluation and presentation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Strategy generator">
+      <form class="panel" onsubmit="event.preventDefault(); generate();">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Generation Settings</h2>
+            <p class="panel-note">Configure the model, dataset, and target quality.</p>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="field full">
+              <div class="label">Dataset</div>
+              <div class="segmented">
+                <label class="radio-tile"><input type="radio" name="dataset" value="8to10" checked>8-10 reviews</label>
+                <label class="radio-tile"><input type="radio" name="dataset" value="5to10">5-10 reviews</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="host">LM Studio host</label>
+              <input id="host" value="http://localhost:1234" autocomplete="off" />
+            </div>
+
+            <div class="field">
+              <label for="model">LM Studio model</label>
+              <input id="model" value="qwen3-4b-mlx" autocomplete="off" />
+            </div>
+
+            <div class="field full">
+              <label for="judgeModel">Judge model (OpenAI)</label>
+              <input id="judgeModel" value="gpt-4.1-mini" autocomplete="off" />
+            </div>
+
+            <div class="field full">
+              <div class="label">Generation profile</div>
+              <div class="profile-buttons">
+                <button type="button" class="profile-btn" data-profile="fast" onclick="setProfile('fast')">Fast</button>
+                <button type="button" class="profile-btn" data-profile="balanced" onclick="setProfile('balanced')">Balanced</button>
+                <button type="button" class="profile-btn" data-profile="quality" onclick="setProfile('quality')">Quality</button>
+              </div>
+              <div class="help-text" id="profileInfo">Balanced: default speed/quality mix.</div>
+            </div>
+
+            <div class="field full">
+              <label for="structureExample">Strategy structure example</label>
+              <input id="structureExample" type="file" accept=".txt,.json,.md,.pdf,application/pdf" />
+              <div class="help-text" id="structureExampleStatus">Template attached: no</div>
+              <div class="help-text" id="structureExampleInspect"></div>
+            </div>
+
+            <div class="field">
+              <label for="categorySelect">Category</label>
+              <select id="categorySelect"></select>
+            </div>
+
+            <div class="field">
+              <label for="productSelect">Product (ASIN)</label>
+              <select id="productSelect"></select>
+              <div class="help-text" id="reviewsInfo"></div>
+            </div>
+
+            <div class="field">
+              <label for="k">K newest reviews</label>
+              <input id="k" type="number" value="8" min="1" max="10" />
+            </div>
+
+            <div class="field">
+              <label for="targetScore">Target score</label>
+              <input id="targetScore" type="number" value="9" step="0.5" min="0" max="10" />
+            </div>
+
+            <div class="field">
+              <label for="maxRounds">Max rounds</label>
+              <input id="maxRounds" type="number" value="4" min="1" max="10" />
+            </div>
+
+            <div class="field">
+              <label for="requestTimeoutSec">Request timeout (sec)</label>
+              <input id="requestTimeoutSec" type="number" value="1800" min="60" max="7200" />
+            </div>
+          </div>
+
+          <button class="primary-action" type="submit">
+            <span class="btn-icon">▶</span>
+            Generate strategy
+          </button>
+        </div>
+      </form>
+
+      <div class="output-stack">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Result</h2>
+              <p class="panel-note">Generated files will appear here.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="result" class="result-box">
+              <div class="empty-state">No results yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Logs</h2>
+              <p class="panel-note">Latest pipeline execution messages.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <pre id="logs"></pre>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<script>
+const PROFILE_DEFAULTS = {
+  fast: {
+    targetScore: "8.5",
+    maxRounds: "2",
+    requestTimeoutSec: "1200",
+    description: "Fast: fewer rounds and shorter timeout for quicker results."
+  },
+  balanced: {
+    targetScore: "9.0",
+    maxRounds: "4",
+    requestTimeoutSec: "1800",
+    description: "Balanced: default speed/quality mix."
+  },
+  quality: {
+    targetScore: "9.5",
+    maxRounds: "5",
+    requestTimeoutSec: "3000",
+    description: "Quality: more time and stricter target for stronger output."
+  }
+};
+
+let selectedProfile = "balanced";
+
+function setStatus(message){
+  document.getElementById("appStatus").textContent = message;
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function getDataset(){
+  return document.querySelector('input[name="dataset"]:checked').value;
+}
+
+function setProfile(profile){
+  selectedProfile = PROFILE_DEFAULTS[profile] ? profile : "balanced";
+  const preset = PROFILE_DEFAULTS[selectedProfile];
+
+  document.getElementById("targetScore").value = preset.targetScore;
+  document.getElementById("maxRounds").value = preset.maxRounds;
+  document.getElementById("requestTimeoutSec").value = preset.requestTimeoutSec;
+  document.getElementById("profileInfo").textContent = preset.description;
+
+  document.querySelectorAll(".profile-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.profile === selectedProfile);
+  });
+}
+
+async function loadCategories(){
+  const dataset = getDataset();
+  const res = await fetch(`/api/categories?dataset=${encodeURIComponent(dataset)}`);
+  const data = await res.json();
+  if(!data.ok){ alert(data.error); return; }
+
+  const sel = document.getElementById("categorySelect");
+  sel.innerHTML = "";
+
+  const optAll = document.createElement("option");
+  optAll.value = "";
+  optAll.textContent = "All categories";
+  sel.appendChild(optAll);
+
+  for(const c of data.categories){
+    const opt = document.createElement("option");
+    opt.value = c.category_lv2;
+    opt.textContent = `${c.category_lv2} (${c.num_products})`;
+    sel.appendChild(opt);
+  }
+}
+
+async function loadProducts(){
+  const dataset = getDataset();
+  const category = document.getElementById("categorySelect").value || "";
+  const res = await fetch(`/api/products?dataset=${encodeURIComponent(dataset)}&category=${encodeURIComponent(category)}`);
+  const data = await res.json();
+  if(!data.ok){ alert(data.error); return; }
+
+  const sel = document.getElementById("productSelect");
+  sel.innerHTML = "";
+
+  for(const p of data.products){
+    const opt = document.createElement("option");
+    opt.value = p.asin;
+    opt.textContent = `${p.product_title} | ${p.asin} | ${p.product_brand || ""} | ${p.category_lv2}`;
+    opt.dataset.maxK = String(p.max_k || 10);
+    opt.dataset.count = String(p.review_count || 0);
+    sel.appendChild(opt);
+  }
+
+  sel.onchange = onProductChanged;
+  onProductChanged();
+}
+
+function onProductChanged(){
+  const sel = document.getElementById("productSelect");
+  const opt = sel.options[sel.selectedIndex];
+  if(!opt){
+    document.getElementById("reviewsInfo").textContent = "";
+    return;
+  }
+
+  const maxK = parseInt(opt.dataset.maxK || "10", 10);
+  const count = parseInt(opt.dataset.count || "0", 10);
+
+  const kInput = document.getElementById("k");
+  kInput.max = String(maxK);
+
+  const cur = parseInt(kInput.value || "8", 10);
+  if(cur > maxK) kInput.value = String(maxK);
+
+  document.getElementById("reviewsInfo").textContent =
+    `Available reviews: ${count}. Max K: ${maxK}.`;
+}
+
+async function init(){
+  document.querySelectorAll('input[name="dataset"]').forEach(r => {
+    r.addEventListener("change", async () => {
+      setStatus("Updating dataset...");
+      await loadCategories();
+      await loadProducts();
+      setStatus("Ready to run");
+    });
+  });
+
+  document.getElementById("categorySelect").addEventListener("change", loadProducts);
+  document.getElementById("structureExample").addEventListener("change", onStructureExampleChanged);
+
+  await loadCategories();
+  await loadProducts();
+  onStructureExampleChanged();
+  setProfile("balanced");
+}
+
+window.addEventListener("load", init);
+
+async function onStructureExampleChanged(){
+  const input = document.getElementById("structureExample");
+  const file = input.files[0];
+  const status = document.getElementById("structureExampleStatus");
+  const inspect = document.getElementById("structureExampleInspect");
+  if(!file){
+    status.textContent = "Template attached: no";
+    inspect.textContent = "";
+    return;
+  }
+
+  status.textContent = `Template attached: yes (${file.name})`;
+  inspect.textContent = "Checking template...";
+
+  try {
+    const isPdf = (file.type === "application/pdf") || file.name.toLowerCase().endsWith(".pdf");
+    let structureExampleContent = "";
+    let structureExampleBase64 = "";
+
+    if(isPdf){
+      structureExampleBase64 = await readFileAsBase64(file);
+    } else {
+      structureExampleContent = await file.text();
+    }
+
+    const res = await fetch("/api/inspect-template", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        structure_example_content: structureExampleContent,
+        structure_example_name: file.name,
+        structure_example_base64: structureExampleBase64
+      })
+    });
+    const data = await res.json();
+
+    if(!data.ok){
+      inspect.textContent = `Template check: warning - ${data.error || "could not read template"}`;
+      return;
+    }
+
+    inspect.textContent = `Template check: ok (${data.chars} chars extracted)`;
+  } catch (err) {
+    inspect.textContent = `Template check: warning - ${String(err)}`;
+  }
+}
+
+async function generate(){
+  const dataset = getDataset();
+  const asin = document.getElementById("productSelect").value;
+  const host = document.getElementById("host").value.trim();
+  const model = document.getElementById("model").value.trim();
+  const judgeModel = document.getElementById("judgeModel").value.trim();
+  const structureFile = document.getElementById("structureExample").files[0] || null;
+
+  const sel = document.getElementById("productSelect");
+  const opt = sel.options[sel.selectedIndex];
+  const maxK = parseInt(opt?.dataset?.maxK || "10", 10);
+
+  let kVal = parseInt(document.getElementById("k").value || "8", 10);
+  if(kVal > maxK) kVal = maxK;
+
+  const targetScore = document.getElementById("targetScore").value;
+  const maxRounds = document.getElementById("maxRounds").value;
+  const requestTimeoutSec = document.getElementById("requestTimeoutSec").value;
+
+  if(!asin || !model){
+    alert("Pick a product and set model");
+    return;
+  }
+
+  const result = document.getElementById("result");
+  result.classList.add("is-running");
+  result.innerHTML = `<div class="empty-state">Running generation...</div>`;
+  document.getElementById("logs").textContent = "";
+  setStatus("Generation started...");
+
+  let structureExampleContent = "";
+  let structureExampleName = "";
+  let structureExampleBase64 = "";
+  if(structureFile){
+    structureExampleName = structureFile.name;
+    const isPdf = (structureFile.type === "application/pdf") || structureFile.name.toLowerCase().endsWith(".pdf");
+    if(isPdf){
+      structureExampleBase64 = await readFileAsBase64(structureFile);
+    } else {
+      structureExampleContent = await structureFile.text();
+    }
+  }
+
+  const res = await fetch("/api/generate", {
+    method:"POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      dataset,
+      asin,
+      host,
+      model,
+      judge_model: judgeModel,
+      profile: selectedProfile,
+      k: kVal,
+      target_score: targetScore,
+      max_rounds: maxRounds,
+      request_timeout_sec: requestTimeoutSec,
+      structure_example_content: structureExampleContent,
+      structure_example_name: structureExampleName,
+      structure_example_base64: structureExampleBase64
+    })
+  });
+  const data = await res.json();
+  result.classList.remove("is-running");
+
+  if(!data.ok){
+    result.innerHTML =
+      `<div class="error-box">Error: ${escapeHtml(data.error || "unknown")}</div>`;
+    document.getElementById("logs").textContent = (data.stdout || "") + "\n" + (data.stderr || "");
+    setStatus("Needs attention");
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="result-grid">
+      <div class="result-item"><span class="result-label">ASIN</span><span class="result-value">${escapeHtml(data.asin)}</span></div>
+      <div class="result-item"><span class="result-label">Profile</span><span class="result-value">${escapeHtml(data.profile || selectedProfile)}</span></div>
+      <div class="result-item"><span class="result-label">Source</span><span class="result-value">${escapeHtml(data.source || "unknown")}${data.cached ? " (cached)" : ""}</span></div>
+      <div class="result-item"><span class="result-label">Template</span><span class="result-value">${escapeHtml(structureExampleName || "none")}</span></div>
+    </div>
+    <div class="link-list">
+      <a class="file-link" href="${data.pdf_url}" download>Download PDF</a>
+      <a class="file-link" href="${data.strategy_json_url}" target="_blank" rel="noreferrer">Strategy JSON</a>
+      <a class="file-link" href="${data.judge_json_url}" target="_blank" rel="noreferrer">Judge JSON</a>
+    </div>
+  `;
+
+  document.getElementById("logs").textContent = data.stdout_tail || "";
+  setStatus("Result ready");
+}
+
+function readFileAsBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      const commaIdx = result.indexOf(",");
+      resolve(commaIdx >= 0 ? result.slice(commaIdx + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error || new Error("Failed to read file"));
+    reader.readAsDataURL(file);
+  });
+}
+</script>
+</body>
+</html>

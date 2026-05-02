@@ -1,0 +1,24 @@
+
+
+{
+  "product": {
+    "asin": "B00X6S8YHY",
+    "title": "Bali Soap - Ylang-Ylang Natural Soap Bar, Face or Body Soap Best for All Skin Types, For Women, Men & Teens, Pack of 3, 3.5 Oz each",
+    "brand": "Bali Soap",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {
+      "type": "weakness",
+      "statement": "Fragrance does not match expectations",
+      "evidence_quotes": [
+        "Doesnt smell anything like yang ylang. Smells like old soy candle.",
+        "The smell is odious. I read that flower (Yang-Yang) was used in the production of Chanel # 5."
+      ]
+    },
+    {
+      "type": "strength",
+      "statement": "Effective for skin care and gentle on sensitive skin",
+      "evidence_quotes": [
+        "I have used this soap for a year and it makes a difference to my skin. It brings out the natural oils in your body.",
+        "Doesn't break my

@@ -1,0 +1,29 @@
+{
+  "score": 8,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "high",
+      "problem": "The strategy claims customers love the Ylang-Ylang fragrance, but multiple reviews report scent inconsistency and unpleasant smell.",
+      "example": "\"Doesnt smell anything like yang ylang. Smells like old soy candle.\""
+    }
+  ],
+  "recommendations": [
+    "Address scent inconsistency more prominently in the strategy and communications.",
+    "Include clear fragrance descriptions and sample offers to manage customer expectations.",
+    "Expand evidence base to include negative reviews for balanced insights.",
+    "Monitor and improve ingredient sourcing to ensure fragrance consistency."
+  ],
+  "revision_brief": {
+    "keep": [
+      "Focus on natural ingredients and skin benefits",
+      "Target natural beauty seekers and skin-conscious consumers",
+      "Use social media and influencer partnerships"
+    ],
+    "change": [
+      "Strengthen messaging around scent consistency and authenticity",
+      "Incorporate negative feedback into insights and risk mitigation"
+    ],
+    "remove": []
+  }
+}

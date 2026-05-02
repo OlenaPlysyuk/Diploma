@@ -1,0 +1,29 @@
+{
+  "score": 9,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "low",
+      "problem": "Limited evidence on the direct brightening effect of the scent",
+      "example": "Review states 'I LIKE THE SMELL BUT I DON'T KNOW HOW MUCH IT HELPS WITH BRIGHTENING.'"
+    }
+  ],
+  "recommendations": [
+    "Clarify in messaging that scent is a secondary benefit and not a primary brightening agent",
+    "Include more explicit claims or evidence about brightening effects if available",
+    "Expand content ideas to address scent benefits and limitations transparently",
+    "Monitor customer feedback on scent perception to adjust marketing accordingly"
+  ],
+  "revision_brief": {
+    "keep": [
+      "Effective exfoliation as a key strength",
+      "Use case of combining with lotion",
+      "Positive tone focused on natural benefits"
+    ],
+    "change": [
+      "Messaging to clarify scent's role as secondary benefit",
+      "Offers to emphasize trial of scent via free samples"
+    ],
+    "remove": []
+  }
+}

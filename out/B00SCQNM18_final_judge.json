@@ -1,0 +1,100 @@
+{
+  "score": 6,
+  "verdict": "not_ok",
+  "issues": [
+    {
+      "severity": "high",
+      "problem": "Use case statement is not supported by the reviews, which do not mention BBQ seasoning or home cooking explicitly.",
+      "example": "\"Product is used for BBQ seasoning in home cooking.\" is not evidenced by the quotes: \"Simply the best.\", \"great procuct\""
+    },
+    {
+      "severity": "medium",
+      "problem": "Key differentiators and value proposition are weakly supported by only two brief positive reviews without detail.",
+      "example": "Key differentiator: \"Positive customer feedback\" is based on two short reviews lacking specifics."
+    }
+  ],
+  "recommendations": [
+    "Remove or revise the use case insight to reflect only what is supported by the reviews.",
+    "Strengthen key differentiators by gathering more detailed customer feedback or product features.",
+    "Clarify messaging to avoid unsupported claims about product usage.",
+    "Ensure all claims in insights and positioning are directly grounded in the provided reviews."
+  ],
+  "fixed_strategy": {
+    "product": {
+      "asin": "B00SCQNM18",
+      "title": "#PorkMafia Memphis Mud BBQ Rub 1 Pound",
+      "brand": "",
+      "category": "Grocery & Gourmet Food"
+    },
+    "insights": [
+      {
+        "type": "strength",
+        "statement": "Customers express positive satisfaction with the product.",
+        "evidence_quotes": [
+          "Simply the best.",
+          "great procuct"
+        ]
+      }
+    ],
+    "positioning": {
+      "value_proposition": "A BBQ rub that customers rate positively",
+      "target_audience": "Consumers looking for a flavorful BBQ rub",
+      "key_differentiators": [
+        "Positive customer feedback"
+      ]
+    },
+    "messaging": {
+      "primary_message": "Customers have expressed satisfaction with this BBQ rub.",
+      "supporting_messages": [
+        "Well-liked seasoning"
+      ],
+      "tone": "Enthusiastic and trustworthy"
+    },
+    "channels": [
+      {
+        "channel": "Social media",
+        "why": "High engagement with food-related content",
+        "content_ideas": [
+          "BBQ recipe videos",
+          "Customer testimonials"
+        ]
+      },
+      {
+        "channel": "Online retailers",
+        "why": "Direct access to target audience",
+        "content_ideas": [
+          "Product reviews",
+          "Comparison charts"
+        ]
+      }
+    ],
+    "offers": [
+      {
+        "offer": "Limited-time discount for first-time buyers",
+        "why": "Drive initial sales and customer acquisition"
+      }
+    ],
+    "risks": [
+      {
+        "risk": "Negative reviews from dissatisfied customers",
+        "mitigation": "Monitor feedback and respond promptly"
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "Sales growth",
+        "target": "20% increase",
+        "measurement": "Monthly sales data"
+      },
+      {
+        "metric": "Customer satisfaction",
+        "target": "95%+ rating",
+        "measurement": "Review analysis"
+      }
+    ],
+    "assumptions": [
+      "Product quality will remain consistent",
+      "Target audience will continue to value flavorful seasoning"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+
+
+{
+  "product": {
+    "asin": "B00X6S8YHY",
+    "title": "Bali Soap - Ylang-Ylang Natural Soap Bar, Face or Body Soap Best for All Skin Types, For Women, Men & Teens, Pack of 3, 3.5 Oz each",
+    "brand": "Bali Soap",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {"type": "strength", "statement": "Customers love the Ylang-Ylang fragrance and its skin benefits.", "evidence_quotes": ["I can't say enough good things about this soap! Ylang Ylang is my favorite essential oil fragrance...", "Smells great! Probably not a coincidence that I've been having better luck with the opposite sex since I got this"]},
+    {"type": "weakness", "statement": "Scent inconsistency and unpleasant smell are major complaints.", "evidence_quotes": ["Doesnt smell anything like yang ylang. Smells like old soy candle.", "The smell is odious. I read that flower (Yang-Yang) was used in the production of Chanel # 5."]},
+    {"type": "use_case", "statement": "Popular for sensitive skin and as gifts.", "evidence_quotes": ["Bali Soaps pack of three ultra-nourishing moisturizing bars... suitable for all skin types including the most sensitive", "These soaps are great for placing in your guest bathroom, inside a mason jar, or as gifts for every occasion"]},
+    {"type": "audience", "statement": "Targeted at natural beauty seekers and skin-conscious consumers.", "evidence_quotes": ["I have used this soap for a year and it makes a difference to my skin. It brings out the natural oils in your body.", "Great soap! Extremely pleased!!"]}
+  ],
+  "positioning": {
+    "value_proposition": "Natural, gentle soap for all skin types with a Ylang-Ylang fragrance, emphasizing consistent scent and skin benefits.",
+    "target_audience": "Individuals seeking natural, skin-friendly products and those looking for effective skincare solutions.",
+    "key_differentiators": ["Cold process soap making with natural glycerin", "No parabens, phthalates, or sulfates", "Consistent Ylang-Ylang fragrance"]
+  },
+  "messaging": {
+    "primary_message": "Experience the soothing Ylang-Ylang fragrance and gentle cleansing power of Bali Soap for all skin types, with consistent scent and natural benefits.",
+    "supporting_messages": ["Naturally moisturizing and safe for even the most sensitive skin", "Perfect for daily use or as a thoughtful gift", "Transparent fragrance description and sourcing"],
+    "tone": "Confident, warm, and trustworthy"
+  },
+  "channels": [
+    {"channel": "Social media", "why": "High engagement with fragrance and skin benefits themes", "content_ideas": ["Customer testimonials about scent and skin results", "Behind-the-scenes of cold process soap making", "Scent comparison visuals"]},
+    {"channel": "Influencer partnerships", "why": "Targeting natural beauty and skincare niches", "content_ideas": ["Collaborations with eco-conscious influencers", "Unboxing videos highlighting packaging and fragrance description"]}
+  ],
+  "offers": [
+    {"offer": "Fragrance sample bundle with purchase", "why": "To address scent inconsistency and manage customer

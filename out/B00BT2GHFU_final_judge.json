@@ -1,0 +1,36 @@
+{
+  "score": 8,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "medium",
+      "problem": "The claim of 'pleasant and lasting scent' is partially unsupported as only one review mentions scent positively and another is vague.",
+      "example": "\"Smelt good\" vs. \"Leaves skin feeling soft with lasting scent\" (not directly quoted in reviews)"
+    },
+    {
+      "severity": "medium",
+      "problem": "The assumption that the film issue is not widespread is based on a single 3-star review, which may underestimate the impact.",
+      "example": "Only one review mentions 'Leaves a film afterward and almost seems to melt in the shower'"
+    }
+  ],
+  "recommendations": [
+    "Gather more evidence or customer feedback specifically about scent longevity to strengthen that insight.",
+    "Consider addressing the film/melting concern more proactively in messaging or product formulation.",
+    "Clarify or remove assumptions that are not strongly supported by multiple reviews.",
+    "Expand evidence base for audience targeting to ensure alignment with actual customer priorities."
+  ],
+  "revision_brief": {
+    "keep": [
+      "Strength insight about softness and cleanliness",
+      "Primary message about soft, smooth skin with sensual scent",
+      "Offers like 3-pack bundle and free sample"
+    ],
+    "change": [
+      "Tone down claims about lasting scent unless more evidence is found",
+      "Mitigation strategy for film issue to be more robust and transparent"
+    ],
+    "remove": [
+      "Assumptions that are not well supported by multiple reviews"
+    ]
+  }
+}
