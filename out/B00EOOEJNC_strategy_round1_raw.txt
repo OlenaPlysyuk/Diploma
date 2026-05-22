@@ -1,0 +1,32 @@
+
+
+{
+  "product": {
+    "asin": "B00EOOEJNC",
+    "title": "Artero Blanc Shampoo",
+    "brand": "Artero",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {
+      "type": "strength",
+      "statement": "Effective at maintaining white hair brightness",
+      "evidence_quotes": ["Good stuff, keeps my 5 month white standard poodle white.", "I hame miniature schnauzers and their leg hair is silver and brighter than ever!"]
+    },
+    {
+      "type": "strength",
+      "statement": "Removes yellow tones from coat",
+      "evidence_quotes": ["Effectively helps to eliminate yellow tones from the coat.", "This worked great to get the yellow out of his neck coat"]
+    },
+    {
+      "type": "use_case",
+      "statement": "Used for white, black, and grey coated pets",
+      "evidence_quotes": ["A color enhancing shampoo especially designed for white, black and grey coats.", "Great for scissoring great brightner."]
+    },
+    {
+      "type": "audience",
+      "statement": "Targeted at pet owners with white-coated breeds",
+      "evidence_quotes": ["I hame miniature schnauzers and their leg hair is silver...", "Have a show dog and this worked great..."]
+    },
+    {
+      "type

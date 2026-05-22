@@ -1,0 +1,6 @@
+pandas
+requests
+reportlab
+evidently
+pytest
+pytest-cov

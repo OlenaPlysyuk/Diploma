@@ -1,0 +1,29 @@
+{
+  "score": 9,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "medium",
+      "problem": "Primary message claims 'smudge-proof' brows, but reviews indicate product is not smudge-proof alone.",
+      "example": "That alone won't make it smudge proof, but if you also use The Pore-fessional - Agent Zero Shine by Benefit, this will help keep it smudge proof..."
+    }
+  ],
+  "recommendations": [
+    "Adjust primary messaging to clarify product is not inherently smudge-proof but works well with complementary products.",
+    "Include more explicit evidence or testimonials about the value of included tools (brush and tweezers).",
+    "Expand on competitor comparisons to strengthen differentiation.",
+    "Monitor customer feedback to validate assumptions about prioritizing affordability and natural results."
+  ],
+  "revision_brief": {
+    "keep": [
+      "Affordable, effective brow kit with natural-looking results",
+      "Use of real customer reviews as evidence",
+      "Target audience focus on sparse brows and scar coverage"
+    ],
+    "change": [
+      "Primary message to remove or qualify 'smudge-proof' claim",
+      "Highlight compatibility with additional products rather than implying standalone smudge-proofness"
+    ],
+    "remove": []
+  }
+}

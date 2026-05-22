@@ -4,10 +4,13 @@
 import argparse
 import csv
 import hashlib
+import html
 import json
 import os
 import random
 import re
+import subprocess
+import sys
 import time
 import zlib
 from datetime import datetime
@@ -25,6 +28,14 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, ListFlowable, ListItem, Table, TableStyle
 )
+
+try:
+    from reportlab.graphics.charts.barcharts import VerticalBarChart
+    from reportlab.graphics.charts.piecharts import Pie
+    from reportlab.graphics.shapes import Drawing, String
+    _HAS_CHARTS = True
+except Exception:
+    _HAS_CHARTS = False
 
 # Optional unicode font support (better UA text in PDF)
 try:
@@ -639,6 +650,84 @@ def build_reviews_block(dfp: pd.DataFrame, k: int, max_chars: int) -> str:
     return "\n".join(parts)
 
 
+def build_balanced_reviews_block(dfp: pd.DataFrame, k: int, max_chars: int) -> str:
+    """
+    Select a compact but diverse evidence pack instead of only newest reviews.
+    This usually improves grounding per token: recent + high-rated + low-rated + detailed reviews.
+    """
+    dfp2 = dfp.copy()
+    dfp2["__dt"] = dfp2["review_date"].apply(lambda x: parse_date_ymd(_s(x)))
+    dfp2["__rating"] = pd.to_numeric(dfp2["rating"], errors="coerce").fillna(0)
+    dfp2["__text_len"] = dfp2["review_text"].map(lambda x: len(_s(x)))
+
+    selected_indices: List[Any] = []
+
+    def add_rows(frame: pd.DataFrame, n: int) -> None:
+        for idx in frame.index.tolist():
+            if idx not in selected_indices:
+                selected_indices.append(idx)
+            if len(selected_indices) >= k or len(selected_indices) >= n:
+                break
+
+    newest_n = max(1, min(2, k))
+    add_rows(dfp2.sort_values("__dt", ascending=False).head(newest_n), k)
+
+    if len(selected_indices) < k:
+        positives = dfp2[dfp2["__rating"] >= 4].sort_values(["__rating", "__text_len"], ascending=False)
+        for idx in positives.index.tolist():
+            if idx not in selected_indices:
+                selected_indices.append(idx)
+            if len(selected_indices) >= k or len([i for i in selected_indices if i in positives.index]) >= 2:
+                break
+
+    if len(selected_indices) < k:
+        critical = dfp2[dfp2["__rating"] <= 3].sort_values(["__rating", "__text_len"], ascending=[True, False])
+        for idx in critical.index.tolist():
+            if idx not in selected_indices:
+                selected_indices.append(idx)
+            if len(selected_indices) >= k or len([i for i in selected_indices if i in critical.index]) >= 2:
+                break
+
+    if len(selected_indices) < k:
+        detailed = dfp2.sort_values("__text_len", ascending=False)
+        for idx in detailed.index.tolist():
+            if idx not in selected_indices:
+                selected_indices.append(idx)
+            if len(selected_indices) >= k:
+                break
+
+    selected = dfp2.loc[selected_indices].sort_values("__dt", ascending=False)
+
+    parts: List[str] = []
+    total = 0
+    for _, r in selected.iterrows():
+        date = _s(r.get("review_date"))
+        rating = _s(r.get("rating"))
+        text = _s(r.get("review_text")).replace("\n", " ")
+        if not text:
+            continue
+
+        chunk = f"- ({date}) rating={rating}: {text}"
+        if total + len(chunk) > max_chars:
+            break
+        parts.append(chunk)
+        total += len(chunk)
+
+    return "\n".join(parts)
+
+
+def build_review_stats(dfp: pd.DataFrame) -> Dict[str, Any]:
+    ratings = pd.to_numeric(dfp.get("rating", pd.Series(dtype=str)), errors="coerce").dropna()
+    counts = {str(i): int((ratings == i).sum()) for i in range(1, 6)}
+    text_lengths = dfp.get("review_text", pd.Series(dtype=str)).map(lambda x: len(_s(x)))
+    return {
+        "review_count": int(len(dfp)),
+        "average_rating": round(float(ratings.mean()), 2) if len(ratings) else None,
+        "rating_counts": counts,
+        "avg_review_text_len": round(float(text_lengths.mean()), 1) if len(text_lengths) else 0,
+    }
+
+
 # ----------------------------
 # PDF Export
 # ----------------------------
@@ -667,7 +756,169 @@ def try_register_unicode_font() -> Optional[str]:
     return None
 
 
-def export_strategy_pdf(strategy: Dict[str, Any], pdf_path: Path, judge: Optional[Dict[str, Any]] = None) -> None:
+def _insight_type_counts(strategy: Dict[str, Any]) -> Dict[str, int]:
+    counts: Dict[str, int] = {}
+    for insight in _list(strategy.get("insights")):
+        if not isinstance(insight, dict):
+            continue
+        key = _s(insight.get("type")) or "other"
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def _make_rating_chart(review_stats: Optional[Dict[str, Any]]) -> Optional[Any]:
+    if not _HAS_CHARTS or not isinstance(review_stats, dict):
+        return None
+    counts = review_stats.get("rating_counts", {})
+    values = [int(counts.get(str(i), 0)) for i in range(1, 6)]
+    if not any(values):
+        return None
+
+    drawing = Drawing(420, 150)
+    chart = VerticalBarChart()
+    chart.x = 35
+    chart.y = 30
+    chart.height = 90
+    chart.width = 330
+    chart.data = [values]
+    chart.categoryAxis.categoryNames = ["1", "2", "3", "4", "5"]
+    chart.valueAxis.valueMin = 0
+    chart.valueAxis.valueMax = max(values) + 1
+    chart.valueAxis.valueStep = max(1, round(max(values) / 4))
+    chart.bars[0].fillColor = colors.HexColor("#4C78A8")
+    drawing.add(chart)
+    drawing.add(String(35, 128, "Rating distribution", fontSize=10, fillColor=colors.black))
+    drawing.add(String(370, 32, "stars", fontSize=8, fillColor=colors.grey))
+    return drawing
+
+
+def _make_insight_chart(strategy: Dict[str, Any]) -> Optional[Any]:
+    if not _HAS_CHARTS:
+        return None
+    counts = _insight_type_counts(strategy)
+    if not counts:
+        return None
+
+    labels = list(counts.keys())[:8]
+    values = [counts[label] for label in labels]
+    drawing = Drawing(420, 170)
+    pie = Pie()
+    pie.x = 45
+    pie.y = 25
+    pie.width = 110
+    pie.height = 110
+    pie.data = values
+    pie.labels = labels
+    palette = ["#4C78A8", "#F58518", "#54A24B", "#E45756", "#72B7B2", "#B279A2", "#EECA3B", "#9D755D"]
+    for i, color in enumerate(palette[:len(values)]):
+        pie.slices[i].fillColor = colors.HexColor(color)
+    drawing.add(pie)
+    drawing.add(String(35, 148, "Insight mix", fontSize=10, fillColor=colors.black))
+    x = 205
+    y = 125
+    for label, value in zip(labels, values):
+        drawing.add(String(x, y, f"{label}: {value}", fontSize=8, fillColor=colors.black))
+        y -= 14
+    return drawing
+
+
+def export_strategy_dashboard_html(
+    strategy: Dict[str, Any],
+    dashboard_path: Path,
+    *,
+    judge: Optional[Dict[str, Any]] = None,
+    review_stats: Optional[Dict[str, Any]] = None,
+) -> None:
+    dashboard_path.parent.mkdir(parents=True, exist_ok=True)
+    product = strategy.get("product", {}) if isinstance(strategy.get("product"), dict) else {}
+    insights = [x for x in _list(strategy.get("insights")) if isinstance(x, dict)]
+    insight_counts = _insight_type_counts(strategy)
+    rating_counts = (review_stats or {}).get("rating_counts", {})
+    max_rating_count = max([int(rating_counts.get(str(i), 0)) for i in range(1, 6)] + [1])
+
+    def esc(value: Any) -> str:
+        return html.escape(_s(value), quote=True)
+
+    rating_bars = "\n".join(
+        f"<div class='bar-row'><span>{i} stars</span><div class='bar'><i style='width:{(int(rating_counts.get(str(i), 0)) / max_rating_count) * 100:.1f}%'></i></div><b>{int(rating_counts.get(str(i), 0))}</b></div>"
+        for i in range(5, 0, -1)
+    )
+    insight_bars = "\n".join(
+        f"<div class='bar-row'><span>{esc(k)}</span><div class='bar accent'><i style='width:{(v / max(insight_counts.values())) * 100:.1f}%'></i></div><b>{v}</b></div>"
+        for k, v in insight_counts.items()
+    ) or "<p>No insights found.</p>"
+
+    insight_cards = "\n".join(
+        "<article class='card'>"
+        f"<span>{esc(ins.get('type'))}</span>"
+        f"<h3>{esc(ins.get('statement'))}</h3>"
+        + "".join(f"<blockquote>{esc(q)}</blockquote>" for q in _list(ins.get("evidence_quotes"))[:2])
+        + "</article>"
+        for ins in insights[:12]
+    )
+
+    score = esc((judge or {}).get("score", ""))
+    verdict = esc((judge or {}).get("verdict", ""))
+    issues = _list((judge or {}).get("issues")) if isinstance(judge, dict) else []
+    issue_rows = "\n".join(
+        f"<li><b>{esc(issue.get('severity'))}</b> {esc(issue.get('problem'))}</li>"
+        for issue in issues if isinstance(issue, dict)
+    ) or "<li>No judge issues reported.</li>"
+
+    html_doc = f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strategy Dashboard - {esc(product.get('asin'))}</title>
+  <style>
+    body {{ margin:0; font-family: Inter, Arial, sans-serif; color:#172033; background:#f6f7f9; }}
+    main {{ max-width:1120px; margin:0 auto; padding:28px; }}
+    header {{ background:#172033; color:white; padding:28px; border-radius:8px; }}
+    h1 {{ margin:0 0 8px; font-size:28px; }}
+    h2 {{ margin:0 0 16px; font-size:18px; }}
+    .meta, .grid {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }}
+    .metric, section, .card {{ background:white; border:1px solid #dde1e7; border-radius:8px; padding:16px; }}
+    .metric b {{ display:block; font-size:26px; margin-bottom:4px; }}
+    .metric span, .card span {{ color:#687386; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }}
+    section {{ margin-top:16px; }}
+    .bar-row {{ display:grid; grid-template-columns:90px 1fr 44px; align-items:center; gap:10px; margin:10px 0; }}
+    .bar {{ height:12px; background:#e7ebf0; border-radius:999px; overflow:hidden; }}
+    .bar i {{ display:block; height:100%; background:#4C78A8; }}
+    .bar.accent i {{ background:#54A24B; }}
+    blockquote {{ margin:10px 0 0; padding-left:10px; border-left:3px solid #4C78A8; color:#3f4a5d; }}
+    ul {{ margin:0; padding-left:20px; }}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>{esc(product.get('title'))}</h1>
+    <div>{esc(product.get('asin'))} · {esc(product.get('brand'))} · {esc(product.get('category'))}</div>
+  </header>
+  <div class="meta" style="margin-top:16px">
+    <div class="metric"><b>{score or "n/a"}</b><span>Judge score</span></div>
+    <div class="metric"><b>{verdict or "n/a"}</b><span>Verdict</span></div>
+    <div class="metric"><b>{esc((review_stats or {}).get('average_rating', 'n/a'))}</b><span>Average rating</span></div>
+    <div class="metric"><b>{esc((review_stats or {}).get('review_count', 'n/a'))}</b><span>Reviews in product dataset</span></div>
+  </div>
+  <section><h2>Rating Distribution</h2>{rating_bars}</section>
+  <section><h2>Insight Mix</h2>{insight_bars}</section>
+  <section><h2>Evidence-backed Insights</h2><div class="grid">{insight_cards}</div></section>
+  <section><h2>Judge Notes</h2><ul>{issue_rows}</ul></section>
+</main>
+</body>
+</html>
+"""
+    dashboard_path.write_text(html_doc, encoding="utf-8")
+
+
+def export_strategy_pdf(
+    strategy: Dict[str, Any],
+    pdf_path: Path,
+    judge: Optional[Dict[str, Any]] = None,
+    review_stats: Optional[Dict[str, Any]] = None,
+) -> None:
     pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
     doc = SimpleDocTemplate(
@@ -729,6 +980,25 @@ def export_strategy_pdf(strategy: Dict[str, Any], pdf_path: Path, judge: Optiona
         story.append(Paragraph("Quality Check", h2))
         story.append(Paragraph(f"<b>Score:</b> {score} / 10 &nbsp;&nbsp; <b>Verdict:</b> {verdict}", body))
         story.append(Spacer(1, 8))
+
+    if isinstance(review_stats, dict):
+        story.append(Paragraph("Review Snapshot", h2))
+        avg_rating = review_stats.get("average_rating")
+        review_count = review_stats.get("review_count", 0)
+        avg_len = review_stats.get("avg_review_text_len", 0)
+        story.append(Paragraph(
+            f"<b>Reviews:</b> {review_count} &nbsp;&nbsp; "
+            f"<b>Average rating:</b> {avg_rating if avg_rating is not None else 'n/a'} &nbsp;&nbsp; "
+            f"<b>Average review length:</b> {avg_len} chars",
+            body,
+        ))
+        rating_chart = _make_rating_chart(review_stats)
+        if rating_chart is not None:
+            story.append(rating_chart)
+        insight_chart = _make_insight_chart(strategy)
+        if insight_chart is not None:
+            story.append(insight_chart)
+        story.append(Spacer(1, 10))
 
     # Insights
     story.append(Paragraph("Insights from Reviews", h2))
@@ -876,6 +1146,8 @@ def main():
 
     # Defaults tuned for Qwen3-4B
     p.add_argument("--k", type=int, default=6, help="Newest reviews per ASIN (default: 6)")
+    p.add_argument("--review-selection", choices=["balanced", "newest"], default="balanced",
+                   help="How to select reviews for the prompt (default: balanced)")
     p.add_argument("--max-products", type=int, default=5, help="Max ASINs to process (default: 5)")
     p.add_argument("--sample-asins", type=int, default=0, help="Randomly sample N ASINs (0 = no sampling)")
     p.add_argument("--seed", type=int, default=42, help="Random seed for sampling")
@@ -889,6 +1161,10 @@ def main():
     p.add_argument("--gen-max-tokens", type=int, default=1000, help="Max tokens for generator response")
     p.add_argument("--judge-max-tokens", type=int, default=900, help="Max tokens for judge response")
     p.add_argument("--structure-example-file", default="", help="Optional file with an example strategy structure")
+    p.add_argument("--evidently-monitor", action="store_true",
+                   help="Generate local Evidently monitoring reports after the pipeline finishes")
+    p.add_argument("--evidently-out-dir", default="monitoring",
+                   help="Output directory for Evidently reports/workspace")
     args = p.parse_args()
 
     csv_path = Path(args.csv)
@@ -969,11 +1245,18 @@ def main():
 
         # IMPORTANT: effective k (do not exceed available rows)
         k_eff = min(int(args.k), int(len(dfp)))
-        reviews_block = build_reviews_block(dfp, k=k_eff, max_chars=args.reviews_max_chars)
+        if args.review_selection == "newest":
+            reviews_block = build_reviews_block(dfp, k=k_eff, max_chars=args.reviews_max_chars)
+        else:
+            reviews_block = build_balanced_reviews_block(dfp, k=k_eff, max_chars=args.reviews_max_chars)
+        review_stats = build_review_stats(dfp)
 
         print(f"\n[{i}/{len(asins)}] ASIN={asin}")
         print(f"   Title: {title[:90]}")
-        print(f"   Reviews used: k={k_eff} (requested {args.k}) | reviews_block_chars={len(reviews_block)}")
+        print(
+            f"   Reviews used: k={k_eff} (requested {args.k}) | "
+            f"selection={args.review_selection} | reviews_block_chars={len(reviews_block)}"
+        )
 
         # --- iterative loop: generator <-> judge until score >= target-score
         strategy_json: Optional[Dict[str, Any]] = None
@@ -1139,7 +1422,15 @@ Output JSON only.
 
         # Export PDF
         pdf_path = out_dir / f"{asin}_final_strategy.pdf"
-        export_strategy_pdf(final_strategy, pdf_path, judge=final_judge)
+        export_strategy_pdf(final_strategy, pdf_path, judge=final_judge, review_stats=review_stats)
+
+        dashboard_path = out_dir / f"{asin}_strategy_dashboard.html"
+        export_strategy_dashboard_html(
+            final_strategy,
+            dashboard_path,
+            judge=final_judge,
+            review_stats=review_stats,
+        )
 
         score_out = (final_judge or {}).get("score", "")
         verdict_out = (final_judge or {}).get("verdict", "")
@@ -1152,10 +1443,14 @@ Output JSON only.
             "score": score_out,
             "verdict": verdict_out,
             "pdf_file": pdf_path.name,
+            "dashboard_file": dashboard_path.name,
             "structure_example_hash": structure_example_hash,
         })
 
-        print(f"   ✅ Done | best_score={best_score} best_ok={best_ok} | PDF={pdf_path.name}")
+        print(
+            f"   ✅ Done | best_score={best_score} best_ok={best_ok} | "
+            f"PDF={pdf_path.name} | dashboard={dashboard_path.name}"
+        )
         time.sleep(0.15)
 
     # Save index.csv + index.json
@@ -1171,6 +1466,7 @@ Output JSON only.
                 "score",
                 "verdict",
                 "pdf_file",
+                "dashboard_file",
                 "structure_example_hash",
             ],
             extrasaction="ignore",
@@ -1183,6 +1479,26 @@ Output JSON only.
     print("\n✅ Done.")
     print("Output folder:", out_dir)
     print("Index:", index_csv)
+
+    if args.evidently_monitor:
+        print("\n📊 Generating Evidently monitoring reports...")
+        cmd = [
+            sys.executable,
+            "monitor_evidently.py",
+            "--csv",
+            str(csv_path),
+            "--index",
+            str(index_csv),
+            "--out-dir",
+            str(args.evidently_out_dir),
+        ]
+        try:
+            subprocess.run(cmd, check=True)
+        except FileNotFoundError:
+            print("⚠️ monitor_evidently.py not found. Run it manually from the project root.")
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ Evidently monitoring failed with exit code {e.returncode}.")
+            print("Install dependencies with: python3 -m pip install -r requirements.txt")
 
 
 if __name__ == "__main__":

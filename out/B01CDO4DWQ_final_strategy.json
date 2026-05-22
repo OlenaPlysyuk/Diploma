@@ -1,0 +1,117 @@
+{
+  "product": {
+    "asin": "B01CDO4DWQ",
+    "title": "(Pack of 2)- Revlon Ultra HD Matte Lip Color- Seduction & Addiction",
+    "brand": "Revlon",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {
+      "type": "strength",
+      "statement": "Beautiful and long-lasting colors with soft finish",
+      "evidence_quotes": [
+        "Very good product colors are beautiful",
+        "They don't dry totally down but they last a while and leave lips soft"
+      ]
+    },
+    {
+      "type": "weakness",
+      "statement": "Not smudge-proof and requires reapplication",
+      "evidence_quotes": [
+        "It is not smudge proof it's a semi-matte",
+        "You do have to reapply"
+      ]
+    },
+    {
+      "type": "use_case",
+      "statement": "Ideal for everyday wear and night out occasions",
+      "evidence_quotes": [
+        "The dark color isn't clownish or too bright, it's perfect for a night out",
+        "Not sticky at all. Doesn't look dry like a lot of matte colors"
+      ]
+    },
+    {
+      "type": "audience",
+      "statement": "Targeted at consumers seeking matte lip color with soft finish",
+      "evidence_quotes": [
+        "Not sticky at all. Doesn't look dry like a lot of matte colors",
+        "The nude color is just a HINT of color"
+      ]
+    }
+  ],
+  "positioning": {
+    "value_proposition": "Long-lasting, soft matte lip color with vibrant shades",
+    "target_audience": "Adults seeking affordable, non-drying matte lip color",
+    "key_differentiators": [
+      "Soft, non-sticky finish",
+      "Vibrant color payoff",
+      "Long wear with lip softness"
+    ]
+  },
+  "messaging": {
+    "primary_message": "Experience beautiful, long-lasting matte lip color that stays soft all day",
+    "supporting_messages": [
+      "Perfect for night out with balanced color intensity",
+      "No drying or chalky finish, just radiant results"
+    ],
+    "tone": "Confident, elegant, and approachable"
+  },
+  "channels": [
+    {
+      "channel": "Social media (Instagram, TikTok)",
+      "why": "Demonstrates color payoff and soft finish in real-time",
+      "content_ideas": [
+        "Before/after lip application videos",
+        "Color swatch comparisons",
+        "User-generated #RevlonLipChallenge posts"
+      ]
+    },
+    {
+      "channel": "Influencer partnerships",
+      "why": "Leverages beauty influencers for matte lip color use cases",
+      "content_ideas": [
+        "Trendy makeup looks with the product",
+        "Long-wear testing videos",
+        "Comparison with other matte lip colors"
+      ]
+    }
+  ],
+  "offers": [
+    {
+      "offer": "Buy one, get one 15% off",
+      "why": "Encourages trial based on positive reapplication feedback"
+    },
+    {
+      "offer": "Free lipstick mirror with purchase",
+      "why": "Supports the product's long-wear claim"
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Perceived smudgability despite semi-matte formula",
+      "mitigation": "Highlight compatibility with blotting papers and setting sprays"
+    }
+  ],
+  "kpis": [
+    {
+      "metric": "Average review rating",
+      "target": "4.75+",
+      "measurement": "Aggregate customer review scores"
+    },
+    {
+      "metric": "Reapplication frequency",
+      "target": "2+ times per day",
+      "measurement": "Customer-reported usage data"
+    },
+    {
+      "metric": "Smudge resistance",
+      "target": "80%+ satisfaction",
+      "measurement": "Survey responses on product longevity"
+    }
+  ],
+  "assumptions": [
+    "Customers will prioritize soft finish over smudge-proofness",
+    "Color variety (seduction & addiction) appeals to diverse audiences",
+    "Product durability meets expectations for matte formula"
+  ]
+}

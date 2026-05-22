@@ -432,7 +432,7 @@
 
     .link-list {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
       gap: 8px;
       margin-top: 14px;
     }
@@ -972,6 +972,9 @@ async function generate(){
     </div>
     <div class="link-list">
       <a class="file-link" href="${data.pdf_url}" download>Download PDF</a>
+      ${data.dashboard_url ? `<a class="file-link" href="${data.dashboard_url}" target="_blank" rel="noreferrer">Strategy Dashboard</a>` : ""}
+      ${data.monitoring_reports?.pipeline_output_quality ? `<a class="file-link" href="${data.monitoring_reports.pipeline_output_quality}" target="_blank" rel="noreferrer">Evidently Quality</a>` : ""}
+      ${data.monitoring_reports?.reviews_data_drift ? `<a class="file-link" href="${data.monitoring_reports.reviews_data_drift}" target="_blank" rel="noreferrer">Evidently Drift</a>` : ""}
       <a class="file-link" href="${data.strategy_json_url}" target="_blank" rel="noreferrer">Strategy JSON</a>
       <a class="file-link" href="${data.judge_json_url}" target="_blank" rel="noreferrer">Judge JSON</a>
     </div>

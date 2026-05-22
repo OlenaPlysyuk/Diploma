@@ -1,0 +1,29 @@
+{
+  "score": 9,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "medium",
+      "problem": "Assumption that customers prioritize soft finish over smudge-proofness is not fully validated by evidence.",
+      "example": "Reviews mention the product is not smudge-proof and requires reapplication, which may concern some users."
+    }
+  ],
+  "recommendations": [
+    "Include more explicit messaging about the semi-matte nature and need for reapplication to set realistic expectations.",
+    "Consider adding more evidence or data to support assumptions about customer priorities.",
+    "Expand risk mitigation strategies to address smudge concerns more proactively.",
+    "Track customer feedback on smudge resistance and reapplication frequency closely to adjust strategy."
+  ],
+  "revision_brief": {
+    "keep": [
+      "Strength insights about color and soft finish",
+      "Target audience and value proposition",
+      "Channel choices and content ideas"
+    ],
+    "change": [
+      "Clarify messaging around smudge-proof limitations",
+      "Add more evidence to support assumptions"
+    ],
+    "remove": []
+  }
+}

@@ -1,0 +1,67 @@
+
+
+{
+  "product": {
+    "asin": "B01CDO4DWQ",
+    "title": "(Pack of 2)- Revlon Ultra HD Matte Lip Color- Seduction & Addiction",
+    "brand": "Revlon",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {
+      "type": "strength",
+      "statement": "Colors are beautiful and long-lasting",
+      "evidence_quotes": [
+        "Very good product colors are beautiful",
+        "Great Colors"
+      ]
+    },
+    {
+      "type": "weakness",
+      "statement": "Not smudge-proof and requires reapplication",
+      "evidence_quotes": [
+        "It is not smudge proof it's a semi-matte",
+        "you do have to reapply"
+      ]
+    },
+    {
+      "type": "use_case",
+      "statement": "Ideal for everyday wear and special occasions",
+      "evidence_quotes": [
+        "The dark color isn't clownish or too bright, it's perfect for a night out",
+        "They don't dry totally down but they last a while"
+      ]
+    },
+    {
+      "type": "audience",
+      "statement": "Targeted at women seeking matte lip color with softness",
+      "evidence_quotes": [
+        "The nude color is just a HINT of color",
+        "They smell good like vanilla or cake"
+      ]
+    }
+  ],
+  "positioning": {
+    "value_proposition": "High-quality matte lip color with rich, long-lasting wear",
+    "target_audience": "Women who prefer matte lip colors that are not drying and offer versatile shades",
+    "key_differentiators": [
+      "Beautiful, long-lasting color payoff",
+      "Soft, non-drying formula"
+    ]
+  },
+  "messaging": {
+    "primary_message": "Experience bold, long-lasting matte color that stays soft and comfortable all day",
+    "supporting_messages": [
+      "Perfect for everyday wear or special occasions with versatile shades",
+      "Smell like vanilla or cake for a luxurious feel"
+    ],
+    "tone": "Confident, friendly, and aspirational"
+  },
+  "channels": [
+    {
+      "channel": "Instagram",
+      "why": "Visual product showcase and user-generated content sharing",
+      "content_ideas": [
+        "Before/after lip color application",
+        "Testimonial videos highlighting softness"
+     

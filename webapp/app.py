@@ -19,6 +19,7 @@ from fastapi.staticfiles import StaticFiles
 ROOT = Path(__file__).resolve().parents[1]  # Diploma_jsontocsv/
 PIPELINE = ROOT / "pipeline_lmstudio_pdf.py"
 OUT_DIR = ROOT / "out"
+MONITORING_DIR = ROOT / "monitoring"
 RAG_INDEX_PATH = OUT_DIR / "rag_index.jsonl"
 STRUCTURE_EXAMPLES_DIR = OUT_DIR / "structure_examples"
 
@@ -63,6 +64,9 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/out", StaticFiles(directory=str(OUT_DIR)), name="out")
+
+MONITORING_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/monitoring", StaticFiles(directory=str(MONITORING_DIR)), name="monitoring")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -303,12 +307,20 @@ async def api_generate(request: Request):
         structure_example_hash=structure_hash,
     )
     if rag_match is not None:
+        dashboard_file = rag_match.get("dashboard_file", f"{asin}_strategy_dashboard.html")
+        dashboard_path = OUT_DIR / str(dashboard_file)
         return {
             "ok": True,
             "asin": asin,
             "pdf_url": f"/out/{rag_match['pdf_file']}",
             "strategy_json_url": f"/out/{rag_match['strategy_json_file']}",
             "judge_json_url": f"/out/{rag_match['judge_json_file']}",
+            "dashboard_url": f"/out/{dashboard_file}" if dashboard_path.exists() else "",
+            "monitoring_reports": {
+                "reviews_data_drift": "/monitoring/reports/reviews_data_drift.html",
+                "pipeline_output_quality": "/monitoring/reports/pipeline_output_quality.html",
+                "summary": "/monitoring/summary.json",
+            },
             "stdout_tail": "Returned from RAG cache.",
             "source": "rag",
             "cached": True,
@@ -335,6 +347,8 @@ async def api_generate(request: Request):
         "--target-score", str(target_score),
         "--max-rounds", str(max_rounds),
         "--max-products", "1",
+        "--evidently-monitor",
+        "--evidently-out-dir", str(MONITORING_DIR),
     ]
     for arg_name, arg_value in PROFILE_PRESETS[profile].items():
         cmd.extend([f"--{arg_name.replace('_', '-')}", str(arg_value)])
@@ -373,6 +387,7 @@ async def api_generate(request: Request):
     pdf_name = f"{asin}_final_strategy.pdf"
     json_name = f"{asin}_final_strategy.json"
     judge_name = f"{asin}_final_judge.json"
+    dashboard_name = f"{asin}_strategy_dashboard.html"
 
     judge_score = ""
     judge_path = OUT_DIR / judge_name
@@ -395,6 +410,7 @@ async def api_generate(request: Request):
         "strategy_json_file": json_name,
         "judge_json_file": judge_name,
         "pdf_file": pdf_name,
+        "dashboard_file": dashboard_name,
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
@@ -404,7 +420,13 @@ async def api_generate(request: Request):
         "pdf_url": f"/out/{pdf_name}",
         "strategy_json_url": f"/out/{json_name}",
         "judge_json_url": f"/out/{judge_name}",
+        "dashboard_url": f"/out/{dashboard_name}",
         "stdout_tail": proc.stdout[-4000:],
+        "monitoring_reports": {
+            "reviews_data_drift": "/monitoring/reports/reviews_data_drift.html",
+            "pipeline_output_quality": "/monitoring/reports/pipeline_output_quality.html",
+            "summary": "/monitoring/summary.json",
+        },
         "source": "pipeline",
         "cached": False,
         "structure_example_hash": structure_hash,

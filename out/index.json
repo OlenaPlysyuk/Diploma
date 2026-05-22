@@ -1,12 +1,13 @@
 [
   {
-    "asin": "B00X6S8YHY",
-    "title": "Bali Soap - Ylang-Ylang Natural Soap Bar, Face or Body Soap Best for All Skin Types, For Women, Men & Teens, Pack of 3, 3.5 Oz each",
-    "brand": "Bali Soap",
+    "asin": "B01CDO4DWQ",
+    "title": "(Pack of 2)- Revlon Ultra HD Matte Lip Color- Seduction & Addiction",
+    "brand": "Revlon",
     "category": "All Beauty",
-    "score": 8,
+    "score": 9,
     "verdict": "ok",
-    "pdf_file": "B00X6S8YHY_final_strategy.pdf",
-    "structure_example_hash": ""
+    "pdf_file": "B01CDO4DWQ_final_strategy.pdf",
+    "dashboard_file": "B01CDO4DWQ_strategy_dashboard.html",
+    "structure_example_hash": "dbc56f20bc1c4988849b295bb1879fc30e4c674e222bb09f9954705513b10474"
   }
 ]

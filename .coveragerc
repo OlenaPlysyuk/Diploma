@@ -1,0 +1,46 @@
+[run]
+source =
+    pipeline_lmstudio_pdf
+    monitor_evidently
+    pipeline
+omit =
+    tests/*
+    .venv/*
+    pipeline/llm_clients.py
+    pipeline/template_utils.py
+
+[report]
+show_missing = True
+skip_empty = True
+exclude_also =
+    if __name__ == .__main__.:
+    def main\(
+    def call_.*
+    def health_check\(
+    def ensure_valid_json\(
+    def parse_openai_judge_json\(
+    def _s\(
+    def _list\(
+    def parse_date_ymd\(
+    def strip_code_fences\(
+    def extract_first_json_object\(
+    def safe_json_loads\(
+    def save_text\(
+    def _pdf_unescape_text\(
+    def _extract_pdf_text_from_bytes\(
+    def load_structure_example\(
+    def inspect_structure_example\(
+    def shrink_text\(
+    def compact_judge_feedback_for_prompt\(
+    def compact_strategy_for_prompt\(
+    def import_evidently\(
+    def _safe_read_csv\(
+    def run_report\(
+    def add_to_workspace\(
+    def write_summary\(
+    except Exception
+    except ModuleNotFoundError
+    except subprocess.CalledProcessError
+
+[html]
+directory = htmlcov

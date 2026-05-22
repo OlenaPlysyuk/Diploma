@@ -1,0 +1,28 @@
+
+
+{
+  "product": {
+    "asin": "B00EOOEJNC",
+    "title": "Artero Blanc Shampoo",
+    "brand": "Artero",
+    "category": "All Beauty"
+  },
+  "insights": [
+    {"type": "strength", "statement": "Effective at enhancing white hair and removing yellow tones", "evidence_quotes": ["Good stuff, keeps my 5 month white standard poodle white.", "I hame miniature schnauzers and their leg hair is silver and brighter than ever!"]},
+    {"type": "strength", "statement": "Pleasant lasting scent and effective for grooming", "evidence_quotes": ["Love the lasting smell. Feel to coat.", "Great for scissoring great brightner."]},
+    {"type": "weakness", "statement": "Does not whiten as expected for some users", "evidence_quotes": ["It's a good shampoo, just doesn't whiten the way I'd hoped."]},
+    {"type": "use_case", "statement": "Targeted for white/silver-haired pets and show dogs", "evidence_quotes": ["Have a show dog and this worked great to get the yellow out of his neck coat.", "I hame miniature schnauzers and their leg hair is silver..."]},
+    {"type": "audience", "statement": "Dog owners with white/silver-haired pets and show dogs", "evidence_quotes": ["Have a show dog and this worked great to get the yellow out of his neck coat.", "I hame miniature schnauzers and their leg hair is silver..."]}
+  ],
+  "positioning": {
+    "value_proposition": "Color-enhancing shampoo that brightens white/silver coats and removes yellow tones",
+    "target_audience": "Dog owners with white/silver-haired pets and show dogs",
+    "key_differentiators": ["Effective at removing yellow tones from coats", "Pleasant lasting scent"]
+  },
+  "messaging": {
+    "primary_message": "Keep your white dogs bright, healthy and shiny with our color-enhancing shampoo",
+    "supporting_messages": ["Removes stubborn yellow tones from coats", "Pleasant lasting scent that lingers after grooming", "Fast shipping ensures timely delivery for show prep"],
+    "tone": "Confident, trustworthy, and enthusiastic"
+  },
+  "channels": [
+    {"channel": "Social media (Instagram, Facebook)", "why": "Target dog owners and pet enthusiasts sharing pet

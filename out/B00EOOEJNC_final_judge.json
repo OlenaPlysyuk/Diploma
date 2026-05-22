@@ -1,0 +1,31 @@
+{
+  "score": 8,
+  "verdict": "ok",
+  "issues": [
+    {
+      "severity": "medium",
+      "problem": "Use case statement about targeting black and grey coats is unsupported by review evidence.",
+      "example": "\"A color enhancing shampoo especially designed for white, black and grey coats.\" has no supporting quotes mentioning black or grey coats."
+    }
+  ],
+  "recommendations": [
+    "Remove or revise the use case targeting black and grey coats to align with evidence.",
+    "Add more explicit messaging about quick shipping as a selling point based on positive review comments.",
+    "Clarify whitening expectations in messaging to manage customer perceptions better.",
+    "Consider adding more evidence or testimonials for black and grey coat effectiveness if targeting those segments."
+  ],
+  "revision_brief": {
+    "keep": [
+      "Strengths about whitening and scent",
+      "Target audience of white/silver-haired and show dog owners",
+      "Offers and risk mitigation related to whitening perception"
+    ],
+    "change": [
+      "Use case to remove unsupported claims about black and grey coats",
+      "Messaging to include quick shipping as a benefit"
+    ],
+    "remove": [
+      "Unsupported evidence quotes about black and grey coats"
+    ]
+  }
+}
